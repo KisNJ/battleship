@@ -1,0 +1,116 @@
+*{
+  /*box-sizing: border-box;
+*/}
+.App{
+  height: 100vh;
+  background-color: #f8fafc;
+}
+body{
+  margin: 0;
+}
+header{
+  height: 15%;
+  display: flex;
+  align-items: center;
+  gap:2rem;
+  font-family: 'Kdam Thmor Pro', sans-serif;
+  background-color: #f1f5f9;
+  padding: 20px;
+  box-shadow: 1px 1px 4px black;
+}
+header img{
+  width: 200px;
+}
+#grid-container{
+  margin: 50px;
+  display: flex;
+  gap:10rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+.grid{
+  display: grid;
+  grid-template: 
+  'X A B C D E F G H I J' 40px
+  'num1 s s s s s s s s s s' 40px
+  'num2 s s s s s s s s s s' 40px
+  'num3 s s s s s s s s s s' 40px
+  'num4 s s s s s s s s s s'40px
+  'num5 s s s s s s s s s s'40px
+  'num6 s s s s s s s s s s'40px
+  'num7 s s s s s s s s s s'40px
+  'num8 s s s s s s s s s s'40px
+  'num9 s s s s s s s s s s'40px
+  'num10 s s s s s s s s s s'40px/40px 40px 40px 40px 40px 40px 40px 40px 40px 40px;
+  
+  outline: 3px solid black;
+  border-radius: 2px;
+  position: relative;
+  
+
+}
+.sub-grid{
+  display: grid;
+  grid-template-rows: repeat(10,40px);
+  grid-template-columns: repeat(10,40px);
+  grid-area: s;
+  position: relative;
+  /*border: 2px solid black;*/
+}
+.sub-grid>div{
+  border:1px solid black;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+ 
+  /*border: 2px solid black;*/
+}
+
+.grid>div:not(.sub-grid){
+  border:1px solid black;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border-radius:2px ;
+}
+.not{
+  background-color: #e2e8f0;
+  /*border:1px solid black;*/
+}
+.sub-grid>div:hover{
+  background-color: #94a3b8;
+}
+.occupied{
+  /*background-color: #7dd3fc;
+  */position: absolute;
+  box-shadow: 0px 0px 18px 6px #7dd3fc inset;
+  /*z-index: 10;*/
+}
+#this{
+  grid-column-start: 6;
+  grid-row-start: 3;
+  
+  position: absolute;
+  font-weight: bold;
+}
+.pcShips{
+  position: absolute;
+  opacity: 1;
+  z-index: -11;
+}
+#mask{
+  opacity: 0;
+  position: absolute;
+  background: red;
+  width: 440px;
+  height: 440px;
+ left: 0;
+ z-index: 1;
+}
