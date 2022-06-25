@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import Ship from "./Ship";
 import Square from "./Square";
-export default function Grid({user,setParentState,canStart,turn,tryHit,hits}) {
+
+export default function Grid({user,setParentState,canStart,turn,tryHit,hits,winner}) {
   const [occupiedTiles, setOccupiedTiles] = useState([]);
   const [moveThisShip, setMoveThisShip] = useState("");
 
@@ -136,7 +137,7 @@ export default function Grid({user,setParentState,canStart,turn,tryHit,hits}) {
       return { whatToReturn, others: coordsThatCouldBeInWay };
     }
     setOccupiedTiles(temp);
-  }, []);
+  }, [winner]);
   
   useEffect(() => {
     
@@ -170,8 +171,6 @@ export default function Grid({user,setParentState,canStart,turn,tryHit,hits}) {
         return false;
       }
       function isTheEnoughSpace(size, xHead, yHead, rowOrcolumn, fromX, fromY) {
-        
-        
         let coordsThatCouldBeInWay = [];
         if (rowOrcolumn === "row") {
           let yLocal = parseInt(yHead);
@@ -249,7 +248,7 @@ export default function Grid({user,setParentState,canStart,turn,tryHit,hits}) {
   let SquareArr = [];
   for (let k = 0; k < 10; k++) {
     for (let m = 0; m < 10; m++) {
-      SquareArr.push(<Square x={k} y={m} tryDrop={tryDrop} tryHit={tryHit} canStart={canStart} hits={hits} occupiedTiles={occupiedTiles}/>);
+      SquareArr.push(<Square user={user}y={k} x={m} tryDrop={tryDrop} tryHit={tryHit} canStart={canStart} hits={hits} occupiedTiles={occupiedTiles}/>)
     }
   }
   
@@ -370,6 +369,7 @@ export default function Grid({user,setParentState,canStart,turn,tryHit,hits}) {
 
   return (
     <div className="grid">
+      {user==="pc"&&!canStart?<div id="blocking"></div>:""}
       {user!=="pc"?<div id="mask" style={!canStart?{display:"none"}:{}}></div>:""}
       {user==="pc"&&turn==="pc"?<div id="mask" style={!canStart?{display:"none"}:{}}></div>:""}
       <div className="not" style={{ gridArea: "X" }}>
@@ -440,7 +440,7 @@ export default function Grid({user,setParentState,canStart,turn,tryHit,hits}) {
       <div className="sub-grid">
         
         {occupiedTiles.map((x, index) => (
-          <Ship user={user}tryToRotate={tryToRotate}rowOrcolumn={x.rowOrcolumn} size={x.size} x={x.x} y={x.y} canStart={canStart} />
+          <Ship user={user}tryToRotate={tryToRotate}rowOrcolumn={x.rowOrcolumn} size={x.size} x={x.x} y={x.y} canStart={canStart} hits={hits} ship={occupiedTiles[index]}/>
         ))}
         {SquareArr}
       </div>

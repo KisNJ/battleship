@@ -2,90 +2,120 @@ import Header from "./components/Header";
 import Grid from "./components/Grid";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import LittleDisplayShips from "./components/LittleDisplayShips";
 import "./App.css";
 import { useState, useEffect } from "react";
 function App() {
   const [playerGrid, setPlayerGrid] = useState([]);
   const [pcGrid, setPcGrid] = useState([]);
+
   const [canStart, setCanStart] = useState(false);
+  const [reset, setReset] = useState(false);
   const [turn, setTurn] = useState("player");
   const [hits, setHits] = useState({ pc: [], player: [] });
+  const [didPCHit, setDidPCHit] = useState(false);
+  const [winner, setWinner] = useState("");
 
-  const [winner, setWinner] = useState([]);
-  function runGame() {
-    //console.log("running")
+  function newGame() {
+    setWinner("");
+    setPlayerGrid([]);
+    setPcGrid([]);
+    setCanStart(false);
+    setTurn("player");
+    setHits({ pc: [], player: [] });
+    setDidPCHit(false);
+    setReset((old) => !old);
   }
-  function isIsInHits(x,y,whereToLook){
-    if(whereToLook==="player"){
-      let tempPLAYER=[...hits.player]
-      for(let i=0;i<tempPLAYER.length;i++){
-        if(tempPLAYER[i].x===x&&tempPLAYER[i].y===y){
-          return true
+  function isIsInHits(x, y, whereToLook) {
+    if (whereToLook === "player") {
+      let tempPLAYER = [...hits.player];
+      for (let i = 0; i < tempPLAYER.length; i++) {
+        if (tempPLAYER[i].x === x && tempPLAYER[i].y === y) {
+          return true;
         }
       }
-      return false
-    }
-    else{
-      let tempPC=[...hits.pc]
-      for(let i=0;i<tempPC.length;i++){
-        if(tempPC[i].x===x&&tempPC[i].y===y){
-          return true
+      return false;
+    } else {
+      let tempPC = [...hits.pc];
+      //console.log(tempPC)
+      //console.log(x,y)
+      for (let i = 0; i < tempPC.length; i++) {
+        if (tempPC[i].x === x && tempPC[i].y === y) {
+          return true;
         }
       }
-      console.log("false")
-      return false
+      
+      return false;
     }
   }
   function pcShoot() {
-    
     let x = Math.floor(Math.random() * 10);
     let y = Math.floor(Math.random() * 10);
-    while (isIsInHits(x,y,"pc")) {
-      console.log("pcshot")
-       x = Math.floor(Math.random() * 10);
-       y = Math.floor(Math.random() * 10);
+    if (didPCHit) {
+      let lastHit = hits.pc[hits.pc.length - 1];
+      console.log("last")
+      console.log(lastHit)
+     
+      if (lastHit.x < 9) {
+        x=lastHit.x+1
+      }else{
+        x=lastHit.x-1
+      }
+      y=lastHit.y
+      console.log(x,y)
     }
-    tryHit(x,y,"pc")
+    while (isIsInHits(x, y, "pc")) {
+      
+      x = Math.floor(Math.random() * 10);
+      y = Math.floor(Math.random() * 10);
+    }
+    tryHit(x, y, "pc");
   }
   function tryHit(x, y, shooter) {
+   
     let temp = { ...hits };
     if (shooter === "player") {
       temp.player = [...temp.player, { x, y }];
     } else {
+      if (itIncludesCoordinate(x, y, "player")) {
+        console.log(x,y)
+        console.log(true)
+        setDidPCHit(true);
+      } else {
+        console.log(x,y)
+        console.log(false)
+        setDidPCHit(false);
+      }
       temp.pc = [...temp.pc, { x, y }];
     }
     setHits({ ...temp });
     if (turn === "player") {
-      setTurn("pc");
-      
+      //setTurn("pc");
     } else {
-      setTurn("player");
+      if(true)
+      {
+       
+      }
+      
     }
-    //console.log(x,y)
+    
   }
-  useEffect(()=>{
-    if(turn==="pc"){
-      pcShoot()
+  useEffect(() => {
+    if (turn === "pc") {
+      pcShoot();
     }
-  },[turn])
-  function calculateHits(){
-    //need 20 hits to win
+  }, [turn]);
 
-  }
-  function calculateSinking(){
-
-  }
-  function itIncludesCoordinate(x, y,where) {
-    console.log(x,y)
-    let temp=[]
-    if(where==="player"){
-      temp=[...playerGrid]
-    }else{
-      temp=[...playerGrid]
+  function itIncludesCoordinate(x, y, where) {
+    
+    let temp = [];
+    if (where === "player") {
+      temp = [...playerGrid];
+    } else {
+      temp = [...pcGrid];
     }
     let xLocal = parseInt(x);
     let yLocal = parseInt(y);
-
     for (let i = 0; i < temp.length; i++) {
       if (parseInt(temp[i].x) === xLocal && parseInt(temp[i].y) === yLocal) {
         return true;
@@ -100,17 +130,65 @@ function App() {
       }
     }
     return false;
-}
-  useEffect(()=>{
+  }
+  useEffect(() => {
+    let playerHitCount;
+    let pcHitCount;
+    if (turn === "player") {
+      let temp = [...hits.player];
+      let hitCount = 0;
+      for (let index = 0; index < temp.length; index++) {
+        const element = temp[index];
+        if (itIncludesCoordinate(element.x, element.y, "pc")) {
+          hitCount++;
+        }
+      }
+      
+      if (hitCount === 20) {
+        setWinner("player");
+        setCanStart(false)
+      }
+      playerHitCount=hitCount
+      
+    } else {
+      let temp = [...hits.pc];
+      let hitCount = 0;
+      for (let index = 0; index < temp.length; index++) {
+        const element = temp[index];
+        if (itIncludesCoordinate(element.x, element.y, "player")) {
+          hitCount++;
+        }
+      }
+      if (hitCount === 20) {
+        setWinner("pc");
+        setCanStart(false)
+      }
+      pcHitCount=hitCount
+    }
+    if(canStart){
+    if(pcHitCount!==20&&playerHitCount!==20){
+      if(turn==="pc"){
+        setTurn("player")
+      }else{
+        setTurn("pc")
+      }
+    }}
+  }, [hits]);
 
-  },[hits])
   return (
     <div className="App">
       <Header />
       <button onClick={() => setCanStart(true)}>Start Game</button>
-      {canStart ? `It's ${turn}-s turn` : ""}
-      {canStart ? runGame() : ""}
+      {winner !== "" ? `The winner is ${winner}` : ""}
+      {canStart && winner === "" ? `It's ${turn}-s turn` : ""}
+      {winner !== "" ? <button onClick={newGame}>New Game</button> : ""}
       <div id="grid-container">
+        {winner !== "" ? <div id="blocking"></div> : ""}
+
+
+
+        <div className="half">
+          <LittleDisplayShips ships={playerGrid} user={"player"} hits={hits.pc}/>
         <DndProvider backend={HTML5Backend}>
           <Grid
             user={"palyer"}
@@ -119,8 +197,11 @@ function App() {
             turn={turn}
             tryHit={tryHit}
             hits={hits.pc}
+            winner={reset}
           />
         </DndProvider>
+        </div>
+        <div className="half">
         <DndProvider backend={HTML5Backend}>
           <Grid
             user={"pc"}
@@ -129,8 +210,11 @@ function App() {
             turn={turn}
             tryHit={tryHit}
             hits={hits.player}
+            winner={reset}
           />
         </DndProvider>
+        <LittleDisplayShips ships={pcGrid} user={"pc"} hits={hits.player}/>
+        </div>
       </div>
     </div>
   );

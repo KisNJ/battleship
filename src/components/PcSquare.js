@@ -1,23 +1,13 @@
 import React from 'react'
-import { useDrop } from 'react-dnd'
 
-export default function Square({x,y,tryDrop,tryHit,canStart,hits,occupiedTiles,user}){
+
+export default function PcSquare({x,y,tryDrop,tryHit,canStart,hits,occupiedTiles}){
     
     function moveShip(fromX,fromY,toX,toY,size,rowOrcolumn){
         
         tryDrop(fromX,fromY,toY,toX,size,rowOrcolumn)
     }
-    const [{ isOver }, drop] = useDrop(() => ({
-        accept: 'ship',
-        //drop: () => moveShip(x,y),
-        collect: monitor => ({
-          isOver: !!monitor.isOver(),
-        }),
-        drop: monitor => {
-            console.log(x,y)
-            moveShip(monitor.x,monitor.y,y,x,monitor.size,monitor.rowOrcolumn)
-          }
-      }), [x, y])
+
     function whatToDoOnClick(){
         if(canStart){
             if(inHits(x,y)){
@@ -58,21 +48,6 @@ export default function Square({x,y,tryDrop,tryHit,canStart,hits,occupiedTiles,u
         }
         return false
       }
-      function userWhat(){
-        if(user==="pc"){
-          return({
-            /*boxShadow:"rgb(255 0 0) 0px 0px 18px 4px inset",
-            zIndex:"1"*/
-            backgroundColor:"red",
-            opacity:".7"
-          })
-        }else{
-          return({
-            backgroundColor:"red",
-            opacity:".7"
-        })
-      }
-    }
       function getStyle(){
         
         if(inHits(x,y)){
@@ -81,13 +56,14 @@ export default function Square({x,y,tryDrop,tryHit,canStart,hits,occupiedTiles,u
             //console.log(itIncludesCoordinate(x,y))
             if(itIncludesCoordinate(x,y)){
                 return(
-                    userWhat()
+                    {
+                        backgroundColor:"red"
+                    }
                 )
             }else{
                 return(
                     {
-                        //backgroundColor:"yellow"
-                        boxShadow:"rgb(251 191 36) 0px 0px 18px 4px inset"
+                        backgroundColor:"yellow"
                     }
                 )
             }
@@ -100,7 +76,7 @@ export default function Square({x,y,tryDrop,tryHit,canStart,hits,occupiedTiles,u
         }
       }
     return(
-        <div ref={drop} onClick={whatToDoOnClick} style={getStyle()}>
+        <div  onClick={whatToDoOnClick} style={getStyle()}>
 
         </div>
     )
