@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useDrop } from "react-dnd";
 import Ship from "./Ship";
 import Square from "./Square";
 

@@ -2,9 +2,7 @@ import React from 'react'
 import { useDrag } from 'react-dnd'
 
 export default function Ship({rowOrcolumn,size,x,y,tryToRotate,user,canStart,hits,ship}){
-  console.log(user)
   function isItSunk(x,y,others){
-    //console.log("calcin")
     let foundXY =false
     for (let index = 0; index < hits.length; index++) {
         if(hits[index].x===x&&hits[index].y===y){
@@ -36,7 +34,6 @@ let isThisShipSunk=isItSunk(x,y,ship.others)
             display:user==="pc"&&isThisShipSunk?"block":(user!=="pc"?isDragging?"block":"block":canStart?"none":isDragging?"block":"10"),
             opacity:user==="palyer"?"1":user==="pc"&&isThisShipSunk?"1":"0",
             bacgkGroundColor:user==="pc"?!isDragging?"none":"":"",
-            
             pointerEvents:user!=="pc"?canStart?"none":"":""
           };
         } else {
@@ -47,7 +44,6 @@ let isThisShipSunk=isItSunk(x,y,ship.others)
             zIndex:user==="pc"&&isThisShipSunk?"999":(user!=="pc"?isDragging?"-1":"10":canStart?"-1":isDragging?"-1":"10"),
             display:user==="pc"&&isThisShipSunk?"block":(user!=="pc"?isDragging?"block":"block":canStart?"none":isDragging?"block":"10"),
             opacity:user==="palyer"?"1":user==="pc"&&isThisShipSunk?"1":"0",
-            
             pointerEvents:user!=="pc"?canStart?"none":"":""
           };
         }

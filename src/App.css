@@ -102,7 +102,7 @@ header img{
 }
 .pcShips{
   position: absolute;
-  opacity: 1;
+  opacity: 0;
   z-index: -11;
   pointer-events: none;
 }
@@ -121,7 +121,7 @@ header img{
 #blocking{
   position: absolute;
   background-color: red;
-  opacity: 0.5;
+  opacity: 0;
   inset: -10px;
   height: auto;
   width: auto;
@@ -158,4 +158,26 @@ header img{
 }
 .sunk{
   box-shadow: 0px 0px 18px 6px #c4190d inset;
+}
+#uppper-container{
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  align-items: center;
+}
+button{
+  height: 5ch;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  background-color: #f1f5f9;
+}
+button:hover{
+  background-color: #94a3b8;
+}
+.upper-text{
+  font-size: 2rem;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: bold;
 }

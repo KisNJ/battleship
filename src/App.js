@@ -37,8 +37,6 @@ function App() {
       return false;
     } else {
       let tempPC = [...hits.pc];
-      //console.log(tempPC)
-      //console.log(x,y)
       for (let i = 0; i < tempPC.length; i++) {
         if (tempPC[i].x === x && tempPC[i].y === y) {
           return true;
@@ -52,17 +50,13 @@ function App() {
     let x = Math.floor(Math.random() * 10);
     let y = Math.floor(Math.random() * 10);
     if (didPCHit) {
-      let lastHit = hits.pc[hits.pc.length - 1];
-      console.log("last")
-      console.log(lastHit)
-     
+      let lastHit = hits.pc[hits.pc.length - 1];     
       if (lastHit.x < 9) {
         x=lastHit.x+1
       }else{
         x=lastHit.x-1
       }
       y=lastHit.y
-      console.log(x,y)
     }
     while (isIsInHits(x, y, "pc")) {
       
@@ -78,27 +72,13 @@ function App() {
       temp.player = [...temp.player, { x, y }];
     } else {
       if (itIncludesCoordinate(x, y, "player")) {
-        console.log(x,y)
-        console.log(true)
         setDidPCHit(true);
       } else {
-        console.log(x,y)
-        console.log(false)
         setDidPCHit(false);
       }
       temp.pc = [...temp.pc, { x, y }];
     }
-    setHits({ ...temp });
-    if (turn === "player") {
-      //setTurn("pc");
-    } else {
-      if(true)
-      {
-       
-      }
-      
-    }
-    
+    setHits({ ...temp });    
   }
   useEffect(() => {
     if (turn === "pc") {
@@ -178,10 +158,12 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <div id="uppper-container">
       <button onClick={() => setCanStart(true)}>Start Game</button>
-      {winner !== "" ? `The winner is ${winner}` : ""}
-      {canStart && winner === "" ? `It's ${turn}-s turn` : ""}
+      {winner !== "" ? <div className="upper-text">The winner is {winner}</div> : ""}
+      {canStart && winner === "" ?<div className="upper-text"> It's {turn}-s turn </div>: ""}
       {winner !== "" ? <button onClick={newGame}>New Game</button> : ""}
+      </div>
       <div id="grid-container">
         {winner !== "" ? <div id="blocking"></div> : ""}
 
